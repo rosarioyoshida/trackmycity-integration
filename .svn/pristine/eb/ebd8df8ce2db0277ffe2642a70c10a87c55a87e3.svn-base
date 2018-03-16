@@ -1,0 +1,56 @@
+package br.com.trackmycity.servlet;
+
+import java.io.IOException;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import br.com.trackmycity.models.AlertGroupType;
+import br.com.trackmycity.models.AlertType;
+import br.com.trackmycity.utils.GoogleUtils;
+
+public class InitializeDataBase extends HttpServlet {
+
+	private static final long serialVersionUID = 3248532085699862303L;
+	public static final String GROUP_TYPE_NAME = "Iluminação Pública"; 
+	public static final String ALERT_TYPE_NAME = "Falta Iluminação"; 
+
+	@Inject GoogleUtils googleUtils;
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		initDatabase();
+		req.getServletContext().getRequestDispatcher("/initResult.jsp").forward(req, resp);
+	}
+
+	public static void main(String[] args) {
+		initDatabase();
+	}
+	
+	public static void initDatabase() {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("trackmycity");
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		
+		AlertGroupType group = new AlertGroupType();
+		group.setName(GROUP_TYPE_NAME);
+		
+		AlertType type = new AlertType();
+		type.setName(ALERT_TYPE_NAME);
+		type.setAlertGroupType(group);
+		
+		em.persist(type);
+		
+		em.getTransaction().commit();
+		em.close();
+		emf.close();
+	}
+	
+}
+

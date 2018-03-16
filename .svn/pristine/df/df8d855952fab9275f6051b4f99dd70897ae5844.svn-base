@@ -1,0 +1,22 @@
+package br.com.trackmycity.rest;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import br.com.trackmycity.dao.AlertTypeDAO;
+import br.com.trackmycity.models.AlertType;
+
+@Path("/teste")
+public class TesteResteasy {
+
+	@Inject AlertTypeDAO alertTypeDao;
+	
+	@GET @Path("/hello") @Produces(MediaType.APPLICATION_JSON)
+	public AlertType hello() {
+		return alertTypeDao.findById(1l);
+	}
+	
+}

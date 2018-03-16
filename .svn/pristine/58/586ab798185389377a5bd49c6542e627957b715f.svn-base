@@ -1,0 +1,45 @@
+package br.com.trackmycity.models;
+
+import java.io.Serializable;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import lombok.Data;
+
+@Entity
+@Table(name = "ALERT_SUBTYPE")
+@XmlRootElement(name = "alert_subtype")
+@Data
+public class AlertSubtype implements Serializable {
+
+	private static final long serialVersionUID = 7146194681382608168L;
+	
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	private String name;
+	private String icon;
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@XmlTransient
+	private AlertType type;
+	
+	public AlertSubtype() {
+		super();
+	}
+
+	public AlertSubtype(String name, String icon, AlertType type) {
+		super();
+		this.name = name;
+		this.icon = icon;
+		this.type = type;
+	}
+
+}

@@ -1,0 +1,39 @@
+package br.com.trackmycity.rest;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import br.com.trackmycity.dao.AlertTypeDAO;
+import br.com.trackmycity.dao.UserAlertDAO;
+import br.com.trackmycity.models.AlertType;
+import br.com.trackmycity.models.UserAlert;
+
+@Path("/teste")
+public class TesteResteasy {
+
+	@Inject AlertTypeDAO alertTypeDAO;
+	@Inject UserAlertDAO userAlertDAO;
+	
+	@GET @Path("/hello") @Produces(MediaType.APPLICATION_JSON)
+	public AlertType hello() {
+		return alertTypeDAO.findById(1l);
+	}
+
+	@GET @Path("/list") @Produces(MediaType.APPLICATION_JSON)
+	public List<AlertType> list() {
+		return alertTypeDAO.list(Arrays.asList(alertTypeDAO.getCriteriaBuilder().asc(alertTypeDAO.getRoot().get("name"))));
+	}
+
+	@GET @Path("/listAlerts") @Produces(MediaType.APPLICATION_JSON)
+	public List<UserAlert> listAlerts() {
+		List<UserAlert> list = userAlertDAO.list(Arrays.asList(userAlertDAO.getCriteriaBuilder().asc(userAlertDAO.getRoot().get("id"))));;
+		return list;
+	}
+	
+}

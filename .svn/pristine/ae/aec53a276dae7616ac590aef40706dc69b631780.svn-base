@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script type="text/javascript" src="extjs/bootstrap.js"></script>
+<script type="text/javascript" src="app.js"></script>
+<link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+<script type="text/javascript">
+
+/* Ext.define('Ext.data.Connection', {override:'Ext.data.Connection', disableCaching:false });
+Ext.define('Ext.data.proxy.Server', {override:'Ext.data.proxy.Server', noCache:false });
+Ext.define('Ext.data.JsonP', {override:'Ext.data.JsonP', disableCaching:false }); */
+
+/* Ext.define('Autor', {
+	extend: 'Ext.data.Model',
+	
+	fields: [
+	         {name: 'id', type: 'long'},
+	         {name: 'nome', type: 'string'},
+	         {name: 'dataNascimento', type: 'date', dateFormat: 'd-m-Y'},
+	         {name: 'idade', type: 'int'}
+		],
+		
+	hasMany: {model: 'Livro', name: 'livros'},
+	
+	proxy: {
+		type: 'rest',
+		url: 'resteasy/autor',
+
+		writer: {
+				type: 'json',
+				writeAllFields: false
+			}
+	}
+	
+});
+
+Ext.define('Livro', {
+	extend: 'Ext.data.Model',
+	
+	fields: [
+	         {name: 'id', type: 'long'},
+	         {name: 'titulo', type: 'string'},
+	         {name: 'dataPublicacao', type: 'date', dateFormat: 'dd/mm/yyyy'}
+		],
+		
+	hasMany: {model: 'Capitulo', name: 'capitulos'}
+
+});
+
+Ext.define('Capitulo', {
+	extend: 'Ext.data.Model',
+	
+	fields: [
+	         {name: 'id', type: 'long'},
+	         {name: 'titulo', type: 'string'},
+	         {name: 'numero', type: 'int'}
+		],
+		
+}); */
+
+Ext.onReady(function() { 
+	
+	   App.model.Autor.load(1, {
+			success: function(autor){
+					console.log('Autor: ' + autor.get('nome'));
+					console.log('dataNascimento: ' + autor.get('dataNascimento'));
+					 var livros = autor.getLivros();
+
+					livros.each(function(livro){
+							console.log('Livro: ' + livro.get('titulo'));
+							var capitulos = livro.capitulos();
+
+							capitulos.each(function(capitulo){
+									console.log('Capitulo: ' + capitulo.get('titulo'));
+								});
+						}); 
+				}
+		}); 
+
+	/* var autor = Ext.create("Autor", {
+		nome: 'Milena da Silva Bispo Yoshida',
+		dataNascimento: '2013-06-21',
+		idade: 27
+	});
+
+	autor.save({success: function(){
+			console.log('saved')
+		}
+	}); */
+
+
+/* 	var store = Ext.create('App.store.AutorStore');
+	store.load();	 */
+
+});
+
+</script>
+</head>
+<body>
+</body>
+</html>

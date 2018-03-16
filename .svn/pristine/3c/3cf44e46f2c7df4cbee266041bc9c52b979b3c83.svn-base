@@ -1,0 +1,11 @@
+Ext.define('App.model.UserAlert', {
+	extend: 'Ext.data.Model',
+	fields: [
+	         {name: 'id', type: 'long'},
+	         {name: 'formattedAddress', type: 'string'},
+	         {name: 'idade', type: 'int'},
+	         {name: 'dataNascimento', type: 'date', dateFormat: 'Y-m-d'} 
+	        ],
+	hasOne: {model: 'App.model.Location', name: 'location'},
+	hasOne: {model: 'App.model.AlertType', name: 'alertType'}
+});

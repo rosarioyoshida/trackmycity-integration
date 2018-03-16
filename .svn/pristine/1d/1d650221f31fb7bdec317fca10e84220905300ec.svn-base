@@ -1,0 +1,39 @@
+package br.com.trackmycity.jpa_helper;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+import br.com.trackmycity.models.AlertSubtype;
+import br.com.trackmycity.models.AlertType;
+import br.com.trackmycity.models.UserAlert;
+
+public class InitializeDataBase {
+	
+	public static void main(String[] args) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("trackmycity");
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		
+		/*AlertType transito = new AlertType("Semáforos", "Alerte sobre Semáforos", "semaforos/icone.png");
+		transito.setId(1l);
+		AlertSubtype subtypeTransito1 = new AlertSubtype("Semáforo Apagado", "semaforos/icone1.jpg", transito);
+		subtypeTransito1.setId(1l);
+		AlertSubtype subtypeTransito2 = new AlertSubtype("Avenida sem Semáforo", "semaforos/icone2.jpg", transito);
+		subtypeTransito2.setId(2l);
+		transito.addSubtype(subtypeTransito1);
+		transito.addSubtype(subtypeTransito2);
+		
+		subtypeTransito1 = em.merge(subtypeTransito1);
+		
+		UserAlert userAlert = new UserAlert("Semáforo apagado na avenida Angélica nº 1200", "foto", 12362.55d, 62.55d, subtypeTransito1);
+		
+		em.persist(userAlert);*/
+		em.getTransaction().commit();
+		
+		em.close();
+		emf.close();
+	}
+	
+}
+

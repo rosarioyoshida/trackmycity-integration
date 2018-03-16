@@ -1,0 +1,28 @@
+package br.com.trackmycity.dao;
+
+import javax.persistence.EntityManager;
+
+public class GenericDAO<T, ID> {
+	
+	private EntityManager em;
+	private Class<T> entityClass;
+	
+	public GenericDAO(EntityManager em, Class<T> entityClass) {
+		this.em = em;
+		this.entityClass = entityClass;
+	}
+	
+	public void save(T t) {
+		em.persist(t);
+	}
+	
+	public T findById(ID id) {
+		T found = em.find(entityClass, id);
+		return found;
+	}
+	
+	public void delete(T t) {
+		em.remove(t);
+	}
+	
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Input</title>
+</head>
+<body>
+	<form action="resteasy/alert" method="post" enctype="multipart/form-data">
+		<p>
+			Latitude : <input type="text" name="lat" size="50" />
+		</p>
+
+		<p>
+			Longitude : <input type="text" name="lng" size="50" />
+		</p>
+		
+		<p>
+			Description : <input type="text" name="description" size="50" />
+		</p>
+		<p>
+			Photo : <input type="file" name="photo" size="50" />
+		</p>
+
+		<p>
+			Alert Type Id : <input type="text" name="alertTypeId" size="50" />
+		</p>
+
+		<input type="submit" value="Upload It" />
+	</form>
+</body>
+</html>

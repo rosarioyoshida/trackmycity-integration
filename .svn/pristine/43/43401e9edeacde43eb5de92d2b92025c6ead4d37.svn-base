@@ -1,0 +1,56 @@
+package br.com.trackmycity.dao;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
+
+import br.com.trackmycity.models.AlertType;
+
+public class AlertTypeDAO {
+	
+	private CommonOperationsDAO<AlertType, Long> commonDAO;
+
+	@Inject
+	public AlertTypeDAO(EntityManager em) {
+		super();
+		this.commonDAO = new CommonOperationsDAO<AlertType, Long>(em, AlertType.class);
+	}
+	
+	public void save(AlertType t) {
+		commonDAO.save(t);
+	}
+
+	public AlertType findById(Long id) {
+		return commonDAO.findById(id);
+	}
+	
+	public List<AlertType> list() {
+		return commonDAO.list();
+	}
+
+	public List<AlertType> list(List<Order> orders) {
+		return commonDAO.list(orders);
+	}
+
+	public CriteriaBuilder getCriteriaBuilder() {
+		return commonDAO.getCriteriaBuilder();
+	}
+
+	public CriteriaQuery<AlertType> getCriteriaQuery() {
+		return commonDAO.getCriteriaQuery();
+	}
+
+	public Root<AlertType> getRoot() {
+		return commonDAO.getRoot();
+	}
+
+	public EntityManager getEm() {
+		return commonDAO.getEm();
+	}
+	
+}

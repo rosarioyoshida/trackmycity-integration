@@ -1,0 +1,118 @@
+package br.com.trackmycity.controller.rest;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+
+import org.apache.commons.io.IOUtils;
+import org.codehaus.jackson.map.annotate.JsonView;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+
+import br.com.trackmycity.beans.google.GeoLocation;
+import br.com.trackmycity.config.jackson.Views;
+import br.com.trackmycity.controller.rest.to.LocationTO;
+import br.com.trackmycity.dao.AlertTypeDAO;
+import br.com.trackmycity.dao.UserAlertDAO;
+import br.com.trackmycity.interceptors.Transactional;
+import br.com.trackmycity.models.UserAlert;
+
+@Path("alert")
+public class UserAlertController {
+	
+	@Inject private UserAlertDAO userAlertDAO;
+	@Inject private AlertTypeDAO alertTypeDAO;
+	
+	@GET @Path("{id}") @Produces(MediaType.APPLICATION_JSON)
+	@JsonView(Views.UserAlertSingleDetail.class)
+	public UserAlert find(@PathParam("id") Long id) {
+		UserAlert found = userAlertDAO.findComplete(id);
+		return found;
+	}
+	
+	@POST @Path("/listWithinDistance") @Consumes(MediaType.APPLICATION_JSON) @Produces(MediaType.APPLICATION_JSON)
+	@JsonView(Views.UserAlertResume.class)
+	public List<UserAlert> listWithinDistance(LocationTO locationTO) {
+		GeoLocation location = GeoLocation.convertDegreesToRadians(locationTO.getLat(), locationTO.getLng());
+		GeoLocation[] boundingCoordinates = location.boundingCoordinates(locationTO.getDistance());
+		List<UserAlert> list = userAlertDAO.listWithinDistance(location, boundingCoordinates, locationTO.getDistance());
+		return list;
+	}
+	
+	@Transactional
+	@POST @Path("/") @Consumes(MediaType.MULTIPART_FORM_DATA) @Produces(MediaType.APPLICATION_JSON)
+	@JsonView(Views.UserAlertSingleDetail.class)
+	public UserAlert create(@MultipartForm UserAlert userAlert) throws IOException {
+		/*Map<String, List<InputPart>> formDataMap = input.getFormDataMap();
+		List<InputPart> list = formDataMap.get("texto");
+		for (InputPart inputPart : list) {
+			System.out.println(inputPart.getBodyAsString());
+		}
+
+		List<InputPart> listFile = formDataMap.get("uploadedFile");
+		for (InputPart inputPart : listFile) {
+			InputStream in = inputPart.getBody(InputStream.class, null);
+		}
+		for (String key : formDataMap.keySet()) {
+			List<InputPart> list = formDataMap.get(key);
+			for (InputPart inputPart : list) {
+				System.out.println(inputPart.getBodyAsString());
+			}
+		}*/
+		//System.out.println(userAlert.getDescription());
+		System.out.println(userAlert.getDescription());
+		FileOutputStream fos = new FileOutputStream(new File("C:/teste.jpg"));
+		IOUtils.write(userAlert.getPhoto(), fos);
+		fos.close();
+		return new UserAlert();
+	}
+
+	/*@Transactional
+	@POST @Path("/") @Consumes(MediaType.APPLICATION_JSON) @Produces(MediaType.APPLICATION_JSON)
+	@JsonView(Views.UserAlertSingleDetail.class)
+	public UserAlert create(UserAlert userAlert) {
+		//userAlert = userAlertDAO.merge(userAlert);
+		userAlert.getAlertType().setId(Long.valueOf(1));
+		userAlert.setId(Long.valueOf(1));
+		try{
+			userAlert.setPhoto(IOUtils.toByteArray(new FileInputStream(new File("C:/teste/teste.jpg"))));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		return userAlert;
+	}*/
+
+	@GET @Path("{id}/photo") @Produces(br.com.trackmycity.rest.bean.MediaType.MEDIA_TYPE_IMAGE_JPEG)
+	public byte[] getPhoto(@PathParam("id") Long id) {
+		byte[] photo = null;
+		try{
+			photo = IOUtils.toByteArray(new FileInputStream(new File("C:/teste/teste.jpg")));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		return photo;
+	}
+
+	@GET @Path("/list") @Produces(MediaType.APPLICATION_JSON)
+	public List<UserAlert> list() {
+		List<UserAlert> list = userAlertDAO.list();
+		return list;
+	}
+}
