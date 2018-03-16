@@ -1,5 +1,0 @@
-package br.com.trackmycity.config.jackson;
-
-public class Views {
-	public static class Resume { }
-}
