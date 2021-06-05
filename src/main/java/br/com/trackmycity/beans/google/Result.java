@@ -43,6 +43,4 @@ public class Result {
 	public void setAddressComponents(List<AddressComponent> addressComponents) {
 		this.addressComponents = addressComponents;
 	}
-	
-	
 }
